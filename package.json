@@ -1,0 +1,27 @@
+{
+  "name": "videocryptplayer-nextjs",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "next dev --port 3001",
+    "build": "next build",
+    "start": "next start --port 3001"
+  },
+  "dependencies": {
+    "@codenkay/video-videocrypt-core": "file:../videocrypt-player/packages/core",
+    "@codenkay/video-videocrypt-react": "file:../videocrypt-player/packages/react",
+    "@codenkay/video-videocrypt-ui": "file:../videocrypt-player/packages/ui",
+    "next": "^15.5.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "video.js": "^7.21.5",
+    "videojs-contrib-eme": "^3.11.1",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "typescript": "^5"
+  }
+}
