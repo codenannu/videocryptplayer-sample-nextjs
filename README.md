@@ -5,11 +5,27 @@ Public playground with a **thin App Router BFF** + full React control chrome for
 | | |
 |--|--|
 | Port | **3001** |
+| Sample version | **1.2.0** |
 | Repo | [videocryptplayer-sample-nextjs](https://github.com/codenannu/videocryptplayer-sample-nextjs) |
-| SDK | `@codenkay/video-videocrypt-ui` · `react` · `core` (**0.1.0**) |
+| SDK | `@codenkay/video-videocrypt-ui` · `react` · `core` (**^1.2.0**) |
 | Modes | **DRM via BFF** (mock when keys absent) · **clear MP4** |
 
-> This sample is **standalone**. It does **not** require cloning a private SDK monorepo. Prefer **npm** packages. The product demo lives in the private monorepo `apps/demo` — this sample is the customer-facing BFF lab.
+## Runtime stack
+
+| Layer | Version |
+|-------|---------|
+| Node.js | **>=20.9.0** |
+| Next.js | **16.4.6** (Active LTS) |
+| React / react-dom | **19.3.1** |
+| Zod | ^4.6.7 |
+| Video.js | ^7.21.5 |
+| SDK | `@codenkay/video-videocrypt-*@^1.2.0` |
+
+> This sample is **standalone**. It does **not** require cloning a private SDK monorepo. Prefer **npm** packages (`^1.2.0`). The product demo lives in the private monorepo `apps/demo` — this sample is the customer-facing BFF lab.
+
+## Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md).
 
 ## SDK packages
 
@@ -28,7 +44,7 @@ Public playground with a **thin App Router BFF** + full React control chrome for
 | **This repo** | [videocryptplayer-sample-nextjs](https://github.com/codenannu/videocryptplayer-sample-nextjs) | **3001** | Thin BFF + UI playground |
 | Angular | [videocryptplayer-sample-angular](https://github.com/codenannu/videocryptplayer-sample-angular) | **4200** | Headless; BFF mode targets this origin |
 
-CORS allowlist should include `http://localhost:5173` and `http://localhost:4200`.
+CORS allowlist (route handlers): `http://localhost:5173` and `http://localhost:4200`.
 
 ## Quick start (mock — no secrets)
 
@@ -39,13 +55,13 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:3001 — enter a video ID → **Play** (mock credentials when Videocrypt keys are absent).
+Requires Node.js **>=20.9.0**. Open http://localhost:3001 — enter a video ID → **Play** (mock credentials when Videocrypt keys are absent).
 
 ## Real Videocrypt keys
 
 ```bash
-cp .env.example .env.local   # if present
-# set VIDEOCRYPT_* server secrets only — never NEXT_PUBLIC_*
+cp .env.example .env.local
+# set VIDEOCRYPT_ACCESS_KEY / SECRET_KEY / ACCOUNT_ID — never NEXT_PUBLIC_*
 npm run dev
 ```
 
@@ -60,7 +76,7 @@ npm run dev
 ## Install peers (into your own app)
 
 ```bash
-npm install @codenkay/video-videocrypt-ui @codenkay/video-videocrypt-react @codenkay/video-videocrypt-core video.js@^7.21.5 videojs-contrib-eme@^3.11.1 react react-dom
+npm install @codenkay/video-videocrypt-ui@^1.2.0 @codenkay/video-videocrypt-react@^1.2.0 @codenkay/video-videocrypt-core@^1.2.0 video.js@^7.21.5 videojs-contrib-eme@^3.11.1 react@19.3.1 react-dom@19.3.1 next@16.4.6
 ```
 
 Wire `playback.getSource`, `licenseUrl`, and `certUrlBuilder` to **your** BFF (copy patterns from `src/app/api/**`).
