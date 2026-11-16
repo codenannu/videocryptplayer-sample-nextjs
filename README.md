@@ -1,22 +1,66 @@
-# videocryptplayer-nextjs
+# Videocrypt Player — Next.js BFF sample
 
-Thin BFF + playground on port **3001** (CORS for :5173 / :4200).
+Public playground with a **thin App Router BFF** + full React control chrome for Videocrypt DRM playback.
 
-## Routes
+| | |
+|--|--|
+| Port | **3001** |
+| Repo | [videocryptplayer-sample-nextjs](https://github.com/codenannu/videocryptplayer-sample-nextjs) |
+| SDK | `@codenkay/video-videocrypt-ui` · `react` · `core` (**0.1.0**) |
+| Modes | **DRM via BFF** (mock when keys absent) · **clear MP4** |
 
-- `POST /api/playback` — credentials (mock when Videocrypt keys absent)
-- `POST /api/drm/license` — license proxy (`Cache-Control: no-store`)
-- `GET /api/drm/cert` — FairPlay cert proxy
+> This sample is **standalone**. It does **not** require cloning a private SDK monorepo. Prefer **npm** packages. The product demo lives in the private monorepo `apps/demo` — this sample is the customer-facing BFF lab.
 
-## Playground
+## SDK packages
 
-- DRM via this BFF
-- Clear progressive MP4 (`drmMode="none"`)
-- `onWatchTime` + UI CSS + Video.js CSS
+| Package | Role | Used here |
+|---------|------|-----------|
+| [`@codenkay/video-videocrypt-core`](https://www.npmjs.com/package/@codenkay/video-videocrypt-core) | DRM / clear engine | Yes |
+| [`@codenkay/video-videocrypt-react`](https://www.npmjs.com/package/@codenkay/video-videocrypt-react) | Headless React player | Yes |
+| [`@codenkay/video-videocrypt-ui`](https://www.npmjs.com/package/@codenkay/video-videocrypt-ui) | Control chrome | **Primary UI** |
+| [`@codenkay/video-videocrypt-angular`](https://www.npmjs.com/package/@codenkay/video-videocrypt-angular) | Angular headless | No — see [Angular sample](https://github.com/codenannu/videocryptplayer-sample-angular) |
+
+## Related samples
+
+| Sample | Repository | Port | Purpose |
+|--------|------------|------|---------|
+| React | [videocryptplayer-sample-react](https://github.com/codenannu/videocryptplayer-sample-react) | **5173** | UI client against this BFF |
+| **This repo** | [videocryptplayer-sample-nextjs](https://github.com/codenannu/videocryptplayer-sample-nextjs) | **3001** | Thin BFF + UI playground |
+| Angular | [videocryptplayer-sample-angular](https://github.com/codenannu/videocryptplayer-sample-angular) | **4200** | Headless; BFF mode targets this origin |
+
+CORS allowlist should include `http://localhost:5173` and `http://localhost:4200`.
+
+## Quick start (mock — no secrets)
 
 ```bash
-cd ../videocrypt-player && npm run build:packages
-cd ../videocryptplayer-nextjs
+git clone https://github.com/codenannu/videocryptplayer-sample-nextjs.git
+cd videocryptplayer-sample-nextjs
 npm install
 npm run dev
 ```
+
+Open http://localhost:3001 — enter a video ID → **Play** (mock credentials when Videocrypt keys are absent).
+
+## Real Videocrypt keys
+
+```bash
+cp .env.example .env.local   # if present
+# set VIDEOCRYPT_* server secrets only — never NEXT_PUBLIC_*
+npm run dev
+```
+
+## BFF routes
+
+| Method | Path | Purpose |
+|--------|------|---------|
+| `POST` | `/api/playback` | Credentials (`fileUrl`, `token`, `siteId?`) |
+| `POST` | `/api/drm/license` | License proxy (`Cache-Control: no-store`) |
+| `GET` | `/api/drm/cert?siteId=` | FairPlay cert proxy (`no-store`) |
+
+## Install peers (into your own app)
+
+```bash
+npm install @codenkay/video-videocrypt-ui @codenkay/video-videocrypt-react @codenkay/video-videocrypt-core video.js@^7.21.5 videojs-contrib-eme@^3.11.1 react react-dom
+```
+
+Wire `playback.getSource`, `licenseUrl`, and `certUrlBuilder` to **your** BFF (copy patterns from `src/app/api/**`).
